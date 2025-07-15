@@ -3,14 +3,18 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event)
   const page = query.page ? Number(query.page) : 1
   const searchQuery = typeof query.query === 'string' ? query.query : ''
+  const sortBy = typeof query.sort_by === 'string' ? query.sort_by : ''
 
   let url
   if (searchQuery) {
     // Use TMDB search endpoint if a query is provided
     url = `${config.public.NUXT_PUBLIC_BASE_URL}search/movie?api_key=${config.API_KEY}&language=en-US&page=${page}&query=${encodeURIComponent(searchQuery)}`
   } else {
-    // Default to popular movies
-    url = `${config.public.NUXT_PUBLIC_BASE_URL}movie/popular?api_key=${config.API_KEY}&language=en-US&page=${page}`
+    // Use discover endpoint for sorting
+    url = `${config.public.NUXT_PUBLIC_BASE_URL}discover/movie?api_key=${config.API_KEY}&language=en-US&page=${page}`
+    if (sortBy) {
+      url += `&sort_by=${encodeURIComponent(sortBy)}`
+    }
   }
 
   try {
