@@ -5,13 +5,28 @@ import { useMoviesStore } from '~/composables/useMovies';
 
 const user = await useSupabaseUser();
 const moviesStore = useMoviesStore();
+
+function handleSearch(query: string) {
+  moviesStore.searchQuery = query;
+  moviesStore.fetchMovies();
+}
+
+function handleClear() {
+  moviesStore.searchQuery = '';
+  moviesStore.fetchMovies();
+}
 </script>
 <template>
   <div class="min-h-screen bg-black text-white font-sans">
     <header class="flex justify-between items-center p-4 bg-gradient-to-b from-black via-gray-900 to-transparent">
       <NuxtLink to="/"><h1 class="text-3xl font-bold text-red-600">MovieApp</h1></NuxtLink>
       <nav class="flex gap-6 items-center">
-        <SearchBar @search="moviesStore.handleSearch" />
+        <SearchBar
+          :input="moviesStore.searchQuery"
+          @update:input="moviesStore.searchQuery = $event"
+          @search="handleSearch"
+          @clear="handleClear"
+        />
         <RouterLink v-if="!user" class="text-sm bg-red-600 px-4 py-1 rounded hover:bg-red-700" to="/login">Login
         </RouterLink>
         <template v-else>
@@ -29,5 +44,3 @@ const moviesStore = useMoviesStore();
     </footer>
   </div>
 </template>
-<script setup lang="ts">
-</script>

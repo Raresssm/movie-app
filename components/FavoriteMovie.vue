@@ -48,14 +48,16 @@ const toggleFavorite = async () => {
   pending.value = true
 
   const method = isFavorite.value ? 'DELETE' : 'POST'
-  const payload = {
+  const params = isFavorite.value ? { movie_id: props.movie.id } : {}
+  const body = isFavorite.value ? undefined : {
     movie_id: props.movie.id,
     movie_data: props.movie
   }
 
   const { error } = await useFetch('/api/favorites', {
     method,
-    body: payload
+    params,
+    body
   })
 
   if (!error.value) {

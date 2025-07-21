@@ -4,34 +4,18 @@ import { getAuthenticatedUser } from "../utils/getUser";
 export default defineEventHandler(async (event) => {
   const user = await getAuthenticatedUser(event)
   const client = await serverSupabaseClient(event)
-  const body = await readBody(event)
+  const query = getQuery(event)
 
-  if (!body || !body.id) {
-    throw createError({ statusCode: 400, message: 'Missing movie ID' })
+  const movieId = query.movie_id ? parseInt(query.movie_id as string, 10) : null
+
+  if (!movieId) {
+    throw createError({ statusCode: 400, message: 'Missing movie_id in query' })
   }
 
-  // Check if the movie belongs to the current user
-  const { data: favorite } = await client
-    .from('favorites')
-    .select('id')
-    .eq('user_id', user.id)
-    .eq('id', body.id)
-    .maybeSingle()
-
-  if (!favorite) {
-    throw createError({ statusCode: 403, message: 'Not your favorite to delete' })
-  }
-
-  /**
-   * SQL equivalent
-   * DELETE FROM favorites
-   * WHERE id = FAVORITE_ID_VALUE
-   *   AND user_id = 'USER_ID_VALUE';
-   */
   const { error } = await client
     .from('favorites')
     .delete()
-    .eq('id', body.id)
+    .eq('movie_id', movieId)
     .eq('user_id', user.id)
 
   if (error) {
