@@ -29,8 +29,8 @@ async function login() {
       <input v-model="email" type="email" placeholder="Email" class="w-full p-2 border rounded" />
       <input v-model="password" type="password" placeholder="Password" class="w-full p-2 border rounded" />
       <div class="flex justify-between ">
-        <button class="bg-blue-600 text-white px-4 py-2 rounded">Login</button>
-        <NuxtLink to="/register">Register</NuxtLink>
+        <button class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Login</button>
+        <NuxtLink class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-950" to="/register">Register</NuxtLink>
       </div>
     </form>
 

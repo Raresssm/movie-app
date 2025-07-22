@@ -8,5 +8,5 @@ const logout = async () => {
 </script>
 
 <template>
-  <button @click="logout" class="text-sm text-red-500">Logout</button>
+  <button @click="logout" class="text-sm bg-red-600 px-4 py-1 rounded hover:bg-red-700">Logout</button>
 </template>

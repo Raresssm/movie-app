@@ -30,7 +30,7 @@ function handleClear() {
         <RouterLink v-if="!user" class="text-sm bg-red-600 px-4 py-1 rounded hover:bg-red-700" to="/login">Login
         </RouterLink>
         <template v-else>
-          <RouterLink to="/favorites">Favorites</RouterLink>
+          <RouterLink class="text-sm bg-blue-900 px-4 py-1 rounded hover:bg-blue-950" to="/favorites">Favorites</RouterLink>
           <LogoutButton></LogoutButton>
         </template>
       </nav>

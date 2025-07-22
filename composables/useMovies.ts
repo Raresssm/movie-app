@@ -10,16 +10,25 @@ export const useMoviesStore = defineStore('movies', () => {
   const sortType = ref('popularity')
   const sortOrder = ref('desc')
   const sortBy = computed(() => `${sortType.value}.${sortOrder.value}`)
+  const loading = ref(false)
 
   const fetchMovies = async (page = 1, query = '', sort = 'popularity.desc') => {
+    loading.value = true
     let url = `/api/movies?page=${page}`
     if (query) url += `&query=${encodeURIComponent(query)}`
     if (!query && sort) url += `&sort_by=${encodeURIComponent(sort)}`
-    const { data } = await useFetch<SearchResults>(url)
-    if (data.value) {
-      movies.value = data.value.results
-      totalPages.value = data.value.total_pages
-      currentPage.value = data.value.page
+    try {
+      const data: SearchResults = await $fetch(url)
+      if (data) {
+        movies.value = data.results
+        totalPages.value = data.total_pages
+        currentPage.value = data.page
+      }
+    } catch (e) {
+      // Optionally handle error
+      movies.value = []
+    } finally {
+      loading.value = false
     }
   }
 
@@ -54,6 +63,7 @@ export const useMoviesStore = defineStore('movies', () => {
     sortType,
     sortOrder,
     sortBy,
+    loading,
     fetchMovies,
     handleSearch,
     handleSortTypeChange,
