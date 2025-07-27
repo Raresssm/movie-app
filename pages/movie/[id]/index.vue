@@ -5,22 +5,24 @@ import SkeletonDetailCard from '~/components/SkeletonDetailCard.vue';
 const route = useRoute()
 
 const movie = ref<SearchResult | null>(null)
+const loading = ref(true)
 
-
-const {data, error, pending} = await useFetch<SearchResult>('/api/movie/' + route.params.id)
+const {data, error} = await useFetch<SearchResult>('/api/movie/' + route.params.id, {
+  key: `movie-${route.params.id}`,
+  server: false
+})
 
 watchEffect(() => {
   if (data.value) {
     movie.value = data.value
+    loading.value = false
   }
 })
-//TODO include the favorites item
-//<FavoriteItem v-if="movie" :movie="movie" :readOnly="false"></FavoriteItem>
 </script>
 
 <template>
   <div class="max-w-5xl mx-auto mt-8">
-    <SkeletonDetailCard v-if="pending" />
+    <SkeletonDetailCard v-if="loading" />
     <div v-else-if="movie" class="flex flex-col md:flex-row gap-6">
       <img
         :alt="movie.title"
