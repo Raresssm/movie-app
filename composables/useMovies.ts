@@ -11,8 +11,13 @@ export const useMoviesStore = defineStore('movies', () => {
   const sortOrder = ref('desc')
   const sortBy = computed(() => `${sortType.value}.${sortOrder.value}`)
   const loading = ref(false)
+  const isFetching = ref(false)
 
   const fetchMovies = async (page = 1, query = '', sort = 'popularity.desc') => {
+    // Prevent overlapping requests
+    if (isFetching.value) return
+    
+    isFetching.value = true
     loading.value = true
     let url = `/api/movies?page=${page}`
     if (query) url += `&query=${encodeURIComponent(query)}`
@@ -29,6 +34,7 @@ export const useMoviesStore = defineStore('movies', () => {
       movies.value = []
     } finally {
       loading.value = false
+      isFetching.value = false
     }
   }
 

@@ -55,6 +55,7 @@ watch(() => moviesStore.movies, (newMovies) => {
       :current-page="moviesStore.currentPage"
       :total-pages="moviesStore.totalPages"
       @update:page="(page) => { moviesStore.currentPage = page }"
+      @loading="(loading) => { moviesStore.loading = loading }"
     />
   </div>
 </template>
