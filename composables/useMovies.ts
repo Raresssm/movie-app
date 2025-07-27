@@ -35,6 +35,17 @@ export const useMoviesStore = defineStore('movies', () => {
   // Initial load
   fetchMovies()
 
+  // Auto-fetch when page changes
+  watch(currentPage, (newPage) => {
+    fetchMovies(newPage, searchQuery.value, sortBy.value)
+  })
+
+  // Auto-fetch when sorting changes
+  watch([sortType, sortOrder], () => {
+    currentPage.value = 1
+    fetchMovies(currentPage.value, searchQuery.value, sortBy.value)
+  })
+
   function handleSortTypeChange(type: string) {
     sortType.value = type
     currentPage.value = 1

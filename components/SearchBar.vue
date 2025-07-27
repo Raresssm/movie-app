@@ -14,6 +14,11 @@ watch(() => props.input, (val) => {
   input.value = val
 })
 
+// Sync input with store when it changes
+watch(input, (val) => {
+  // Don't emit on every keystroke - only when explicitly triggered
+})
+
 // No automatic search - only manual via submit button
 
 const canSubmit = computed(() => input.value.length >= 3)

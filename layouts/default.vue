@@ -19,7 +19,7 @@ function handleSearch(query: string) {
 
 function handleClear() {
   moviesStore.searchQuery = '';
-  moviesStore.fetchMovies();
+  moviesStore.fetchMovies(1, '', moviesStore.sortBy);
 }
 </script>
 <template>
