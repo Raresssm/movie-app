@@ -8,7 +8,13 @@ const moviesStore = useMoviesStore();
 
 function handleSearch(query: string) {
   moviesStore.searchQuery = query;
-  moviesStore.fetchMovies();
+  moviesStore.fetchMovies(1, query, moviesStore.sortBy);
+  
+  // Navigate to home page if not already there
+  const route = useRoute()
+  if (route.path !== '/') {
+    navigateTo('/')
+  }
 }
 
 function handleClear() {
@@ -23,7 +29,6 @@ function handleClear() {
       <nav class="flex gap-6 items-center">
         <SearchBar
           :input="moviesStore.searchQuery"
-          @update:input="moviesStore.searchQuery = $event"
           @search="handleSearch"
           @clear="handleClear"
         />

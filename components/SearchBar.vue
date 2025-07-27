@@ -14,13 +14,17 @@ watch(() => props.input, (val) => {
   input.value = val
 })
 
-watch(input, (val) => {
-  emit('update:input', val)
-})
+// No automatic search - only manual via submit button
 
 const canSubmit = computed(() => input.value.length >= 3)
 
 function onSubmit() {
+  if (canSubmit.value) {
+    emit('search', input.value)
+  }
+}
+
+function onEnterKey() {
   if (canSubmit.value) {
     emit('search', input.value)
   }
@@ -39,7 +43,7 @@ function onClear() {
       class="transition-all duration-300 ease-in-out bg-neutral-800 text-white pl-4 pr-10 py-2 border-2 border-transparent rounded-full focus:outline-none focus:w-64 w-10 group-hover:w-64 cursor-pointer h-10 relative z-10"
       placeholder="Search..."
       type="text"
-      @keydown.enter="onSubmit"
+      @keydown.enter="onEnterKey"
     />
     <button
       type="button"

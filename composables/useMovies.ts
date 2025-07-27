@@ -32,14 +32,8 @@ export const useMoviesStore = defineStore('movies', () => {
     }
   }
 
-  watchEffect(() => {
-    fetchMovies(currentPage.value, searchQuery.value, sortBy.value)
-  })
-
-  function handleSearch(query: string) {
-    searchQuery.value = query
-    currentPage.value = 1
-  }
+  // Initial load
+  fetchMovies()
 
   function handleSortTypeChange(type: string) {
     sortType.value = type
@@ -51,10 +45,6 @@ export const useMoviesStore = defineStore('movies', () => {
     currentPage.value = 1
   }
 
-  watch([sortType, sortOrder], () => {
-    currentPage.value = 1
-  })
-
   return {
     movies,
     currentPage,
@@ -65,7 +55,6 @@ export const useMoviesStore = defineStore('movies', () => {
     sortBy,
     loading,
     fetchMovies,
-    handleSearch,
     handleSortTypeChange,
     handleSortOrderChange,
   }
