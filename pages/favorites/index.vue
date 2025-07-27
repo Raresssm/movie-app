@@ -21,11 +21,13 @@ watchEffect(() => {
 
 <template>
   <div>
-    <h1>Favorite movies</h1>
-    <div
-      v-for="movie in movies" :key="movie.id"
-      class="grid grid-cols-2 gap-4 p-4 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3">
-      <MovieCard :movie="movie.movie_data" />
+    <h1 class="text-2xl font-bold mb-4 p-4">Favorite movies</h1>
+    <div class="grid grid-cols-2 gap-4 p-4 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3">
+      <MovieCard
+        v-for="movie in movies" 
+        :key="movie.id"
+        :movie="(movie as any).movie_data" 
+      />
     </div>
   </div>
 </template>

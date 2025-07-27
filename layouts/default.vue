@@ -25,7 +25,7 @@ function handleClear() {
 <template>
   <div class="min-h-screen bg-black text-white font-sans">
     <header class="flex justify-between items-center p-4 bg-gradient-to-b from-black via-gray-900 to-transparent">
-      <NuxtLink to="/"><h1 class="text-3xl font-bold text-red-600">MovieApp</h1></NuxtLink>
+      <NuxtLink to="/" @click="handleClear"><h1 class="text-3xl font-bold text-red-600">MovieApp</h1></NuxtLink>
       <nav class="flex gap-6 items-center">
         <SearchBar
           :input="moviesStore.searchQuery"
