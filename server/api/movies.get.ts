@@ -4,12 +4,16 @@ export default defineEventHandler(async (event) => {
   const page = query.page ? Number(query.page) : 1
   const searchQuery = typeof query.query === 'string' ? query.query : ''
   const sortBy = typeof query.sort_by === 'string' ? query.sort_by : 'popularity.desc'
+  const genreId = typeof query.with_genres === 'string' ? query.with_genres : ''
 
   let url
   if (searchQuery && searchQuery.length >= 3) {
     url = `${config.public.NUXT_PUBLIC_BASE_URL}search/movie?api_key=${config.API_KEY}&language=en-US&page=${page}&query=${encodeURIComponent(searchQuery)}`
   } else {
     url = `${config.public.NUXT_PUBLIC_BASE_URL}discover/movie?api_key=${config.API_KEY}&language=en-US&page=${page}&sort_by=${encodeURIComponent(sortBy)}`
+    if (genreId) {
+      url += `&with_genres=${encodeURIComponent(genreId)}`
+    }
   }
 
   try {

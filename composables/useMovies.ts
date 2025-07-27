@@ -9,11 +9,12 @@ export const useMoviesStore = defineStore('movies', () => {
   const searchQuery = ref('')
   const sortType = ref('popularity')
   const sortOrder = ref('desc')
+  const selectedGenre = ref('')
   const sortBy = computed(() => `${sortType.value}.${sortOrder.value}`)
   const loading = ref(false)
   const isFetching = ref(false)
 
-  const fetchMovies = async (page = 1, query = '', sort = 'popularity.desc') => {
+  const fetchMovies = async (page = 1, query = '', sort = 'popularity.desc', genre = '') => {
     // Prevent overlapping requests
     if (isFetching.value) return
     
@@ -22,6 +23,7 @@ export const useMoviesStore = defineStore('movies', () => {
     let url = `/api/movies?page=${page}`
     if (query) url += `&query=${encodeURIComponent(query)}`
     if (!query && sort) url += `&sort_by=${encodeURIComponent(sort)}`
+    if (!query && genre) url += `&with_genres=${encodeURIComponent(genre)}`
     try {
       const data: SearchResults = await $fetch(url)
       if (data) {
@@ -43,13 +45,13 @@ export const useMoviesStore = defineStore('movies', () => {
 
   // Auto-fetch when page changes
   watch(currentPage, (newPage) => {
-    fetchMovies(newPage, searchQuery.value, sortBy.value)
+    fetchMovies(newPage, searchQuery.value, sortBy.value, selectedGenre.value)
   })
 
-  // Auto-fetch when sorting changes
-  watch([sortType, sortOrder], () => {
+  // Auto-fetch when sorting or genre changes
+  watch([sortType, sortOrder, selectedGenre], () => {
     currentPage.value = 1
-    fetchMovies(currentPage.value, searchQuery.value, sortBy.value)
+    fetchMovies(currentPage.value, searchQuery.value, sortBy.value, selectedGenre.value)
   })
 
   function handleSortTypeChange(type: string) {
@@ -62,6 +64,11 @@ export const useMoviesStore = defineStore('movies', () => {
     currentPage.value = 1
   }
 
+  function handleGenreChange(genreId: string) {
+    selectedGenre.value = genreId
+    currentPage.value = 1
+  }
+
   return {
     movies,
     currentPage,
@@ -69,10 +76,12 @@ export const useMoviesStore = defineStore('movies', () => {
     searchQuery,
     sortType,
     sortOrder,
+    selectedGenre,
     sortBy,
     loading,
     fetchMovies,
     handleSortTypeChange,
     handleSortOrderChange,
+    handleGenreChange,
   }
 }) 

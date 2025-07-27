@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue';
+import type { GenresResponse } from '~/types/types';
 
 const sortTypes = [
   { value: 'popularity', label: 'Popularity' },
@@ -25,15 +26,25 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  modelValueGenre: {
+    type: String,
+    required: true,
+  },
 });
 
-const emit = defineEmits(['update:type', 'update:order']);
+const emit = defineEmits(['update:type', 'update:order', 'update:genre']);
+
+// Fetch genres
+const { data: genresData } = await useFetch<GenresResponse>('/api/genres');
 
 function onTypeChange(event: Event) {
   emit('update:type', (event.target as HTMLSelectElement).value);
 }
 function onOrderChange(event: Event) {
   emit('update:order', (event.target as HTMLSelectElement).value);
+}
+function onGenreChange(event: Event) {
+  emit('update:genre', (event.target as HTMLSelectElement).value);
 }
 </script>
 
@@ -63,6 +74,22 @@ function onOrderChange(event: Event) {
       >
         <option v-for="order in sortOrders" :key="order.value" :value="order.value" class="bg-gray-800 text-black disabled:bg-gray-700 disabled:text-gray-500">
           {{ order.label }}
+        </option>
+      </select>
+      <span class="pointer-events-none absolute right-2 top-8 text-gray-400">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+      </span>
+    </div>
+    <div class="relative">
+      <label class="block text-sm font-medium mb-1 text-gray-300">Filter by Genre</label>
+      <select
+        class="appearance-none rounded border border-gray-700 px-2 py-1 bg-gray-800 text-gray-200 focus:ring-2 focus:ring-red-600 focus:border-red-600 transition-colors duration-150 hover:bg-gray-700 w-full pr-8"
+        :value="modelValueGenre"
+        @change="onGenreChange"
+      >
+        <option value="" class="bg-gray-800 text-black">All Genres</option>
+        <option v-for="genre in genresData?.genres" :key="genre.id" :value="genre.id" class="bg-gray-800 text-black disabled:bg-gray-700 disabled:text-gray-500">
+          {{ genre.name }}
         </option>
       </select>
       <span class="pointer-events-none absolute right-2 top-8 text-gray-400">

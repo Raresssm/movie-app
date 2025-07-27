@@ -52,3 +52,12 @@ export interface ImagesResponse {
   logos: Image[];
   posters: Image[];
 }
+
+export interface Genre {
+  id: number;
+  name: string;
+}
+
+export interface GenresResponse {
+  genres: Genre[];
+}

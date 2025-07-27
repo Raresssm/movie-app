@@ -37,8 +37,10 @@ watch(() => moviesStore.movies, (newMovies) => {
       <SortDropdowns
         :model-value-type="moviesStore.sortType"
         :model-value-order="moviesStore.sortOrder"
+        :model-value-genre="moviesStore.selectedGenre"
         @update:type="moviesStore.handleSortTypeChange"
         @update:order="moviesStore.handleSortOrderChange"
+        @update:genre="moviesStore.handleGenreChange"
       />
     </div>
     <div class="grid grid-cols-2 gap-4 p-4 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3">

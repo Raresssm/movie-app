@@ -8,8 +8,8 @@ const moviesStore = useMoviesStore();
 
 function handleSearch(query: string) {
   moviesStore.searchQuery = query;
-  moviesStore.fetchMovies(1, query, moviesStore.sortBy);
-  
+  moviesStore.fetchMovies(1, query, moviesStore.sortBy, moviesStore.selectedGenre);
+
   // Navigate to home page if not already there
   const route = useRoute()
   if (route.path !== '/') {
@@ -19,7 +19,7 @@ function handleSearch(query: string) {
 
 function handleClear() {
   moviesStore.searchQuery = '';
-  moviesStore.fetchMovies(1, '', moviesStore.sortBy);
+  moviesStore.fetchMovies(1, '', moviesStore.sortBy, moviesStore.selectedGenre);
 }
 </script>
 <template>
