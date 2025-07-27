@@ -11,6 +11,7 @@ const selectedVideo = ref<Video | null>(null)
 const showTrailerModal = ref(false)
 const currentIndex = ref(0)
 const showSlideshow = ref(false)
+const slideshowImageLoading = ref(false)
 
 const {data, error} = await useFetch<SearchResult>('/api/movie/' + route.params.id, {
   key: `movie-${route.params.id}`,
@@ -73,13 +74,21 @@ onMounted(() => {
     switch (event.key) {
       case 'ArrowRight':
         event.preventDefault()
+        console.log('Arrow right pressed')
+        slideshowImageLoading.value = true
+        console.log('Loading set to true:', slideshowImageLoading.value)
         currentIndex.value = (currentIndex.value + 1) % backdrops.value.length
+        console.log('New index:', currentIndex.value)
         break
       case 'ArrowLeft':
         event.preventDefault()
+        console.log('Arrow left pressed')
+        slideshowImageLoading.value = true
+        console.log('Loading set to true:', slideshowImageLoading.value)
         currentIndex.value = currentIndex.value === 0 
           ? backdrops.value.length - 1 
           : currentIndex.value - 1
+        console.log('New index:', currentIndex.value)
         break
       case 'Escape':
         event.preventDefault()
@@ -219,7 +228,7 @@ onMounted(() => {
           
           <!-- Navigation buttons -->
           <button
-            @click.stop="currentIndex = currentIndex === 0 ? backdrops.length - 1 : currentIndex - 1"
+            @click.stop="console.log('Previous clicked'); slideshowImageLoading = true; console.log('Loading set to true:', slideshowImageLoading); currentIndex = currentIndex === 0 ? backdrops.length - 1 : currentIndex - 1; console.log('New index:', currentIndex)"
             class="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-10"
             aria-label="Previous image"
           >
@@ -229,7 +238,7 @@ onMounted(() => {
           </button>
           
           <button
-            @click.stop="currentIndex = (currentIndex + 1) % backdrops.length"
+            @click.stop="console.log('Next clicked'); slideshowImageLoading = true; console.log('Loading set to true:', slideshowImageLoading); currentIndex = (currentIndex + 1) % backdrops.length; console.log('New index:', currentIndex)"
             class="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-10"
             aria-label="Next image"
           >
@@ -240,10 +249,21 @@ onMounted(() => {
           
           <!-- Current image -->
           <div class="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
+            <!-- Loading overlay -->
+            <div 
+              v-show="slideshowImageLoading"
+              class="absolute inset-0 bg-gray-900 flex items-center justify-center z-20"
+            >
+              <div class="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            </div>
+            {{ console.log('slideshowImageLoading state:', slideshowImageLoading) }}
+            
             <img
               :src="`https://image.tmdb.org/t/p/original${backdrops[currentIndex].file_path}`"
               :alt="`${movie?.title} image ${currentIndex + 1}`"
               class="w-full h-full object-contain"
+              @load="console.log('Image loaded'); slideshowImageLoading = false; console.log('Loading set to false:', slideshowImageLoading)"
+              @error="console.log('Image error'); slideshowImageLoading = false; console.log('Loading set to false:', slideshowImageLoading)"
             />
           </div>
           
