@@ -171,7 +171,7 @@ onUnmounted(() => {
         </div>
         <template v-else v-for="movie in moviesStore.movies" :key="`list-${movie.id}`">
           <div class="list-item bg-gradient-to-r from-gray-800/50 to-gray-900/80 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-700/50">
-            <NuxtLink :to="`movie/${movie.id}`" class="flex gap-4 p-4">
+            <NuxtLink :to="`/movie/${movie.id}`" class="flex gap-4 p-4">
               <!-- Movie Poster -->
               <div class="relative flex-shrink-0">
                 <div v-if="movie.poster_path" class="relative">

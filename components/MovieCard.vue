@@ -29,7 +29,7 @@ const ratingColor = computed(() => {
 
 <template>
   <div class="group relative h-full">
-    <NuxtLink :to="`movie/${props.movie.id}`" class="block h-full">
+    <NuxtLink :to="`/movie/${props.movie.id}`" class="block h-full">
       <!-- Movie Card -->
       <div class="movie-card bg-gradient-to-b from-gray-800/50 to-gray-900/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 h-full flex flex-col">
         
